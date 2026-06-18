@@ -1,8 +1,7 @@
 import streamlit as st
 import requests
 
-API = "https://aws-agreement-rag-chatbot.streamlit.app/"
-
+API = "http://127.0.0.1:8000"
 
 # st.set_page_config(
 #     page_title="AWS Agreement Q&A",
