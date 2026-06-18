@@ -19,12 +19,23 @@ if st.button("Submit"):
 
     response = requests.post(
         f"{API}/ask",
-        json={
-            "query": question
-        }
+        json={"query": question}
     )
 
-    data = response.json()
+    st.write("Status Code:", response.status_code)
+    st.write("Response Text:", response.text)
+
+    if response.status_code == 200:
+        data = response.json()
+
+        st.success(data["answer"])
+
+        if "sources" in data:
+            st.subheader("Sources")
+            for source in data["sources"]:
+                st.info(source)
+    else:
+        st.error(f"API Error: {response.text}")
 
     st.subheader("Answer")
 
