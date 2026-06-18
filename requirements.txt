@@ -1,0 +1,12 @@
+fastapi
+uvicorn
+streamlit
+requests
+sqlalchemy
+pydantic
+faiss-cpu
+sentence-transformers
+langchain
+langchain-community
+pypdf
+huggingface_hub
