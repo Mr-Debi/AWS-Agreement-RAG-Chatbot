@@ -1,7 +1,8 @@
 import streamlit as st
 import requests
 
-API = "https://your-render-app.onrender.com"
+# Replace this with your deployed FastAPI / Render URL
+API = "https://your-fastapi-app.onrender.com"
 
 st.title("AWS Agreement RAG Chatbot")
 
@@ -17,7 +18,9 @@ if st.button("Submit"):
         try:
             response = requests.post(
                 f"{API}/ask",
-                json={"query": question},
+                json={
+                    "query": question
+                },
                 timeout=60
             )
 
@@ -28,7 +31,9 @@ if st.button("Submit"):
                 data = response.json()
 
                 st.subheader("Answer")
-                st.success(data.get("answer", "No answer found"))
+                st.success(
+                    data.get("answer", "No answer found")
+                )
 
                 st.subheader("Sources")
 
@@ -41,7 +46,9 @@ if st.button("Submit"):
                 )
 
         except Exception as e:
-            st.error(f"Connection error: {e}")
+            st.error(
+                f"Connection error: {e}"
+            )
 
 
 st.divider()
@@ -62,4 +69,6 @@ if st.button("Load Analytics"):
             st.error(response.text)
 
     except Exception as e:
-        st.error(f"Analytics error: {e}")
+        st.error(
+            f"Analytics error: {e}"
+        )
