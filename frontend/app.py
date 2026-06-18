@@ -3,11 +3,6 @@ import requests
 
 API = "https://your-render-app.onrender.com"
 
-# st.set_page_config(
-#     page_title="AWS Agreement Q&A",
-#     layout="wide"
-# )
-
 st.title("AWS Agreement RAG Chatbot")
 
 question = st.text_input(
@@ -16,34 +11,38 @@ question = st.text_input(
 
 if st.button("Submit"):
 
-    response = requests.post(
-        f"{API}/ask",
-        json={"query": question}
-    )
-
-    st.write("Status Code:", response.status_code)
-    st.write("Response Text:", response.text)
-
-    if response.status_code == 200:
-        data = response.json()
-
-        st.success(data["answer"])
-
-        if "sources" in data:
-            st.subheader("Sources")
-            for source in data["sources"]:
-                st.info(source)
+    if not question:
+        st.warning("Please enter a question")
     else:
-        st.error(f"API Error: {response.text}")
+        try:
+            response = requests.post(
+                f"{API}/ask",
+                json={"query": question},
+                timeout=60
+            )
 
-    st.subheader("Answer")
+            st.write("Status Code:", response.status_code)
 
-    st.success(data["answer"])
+            if response.status_code == 200:
 
-    st.subheader("Sources")
+                data = response.json()
 
-    for source in data["sources"]:
-        st.info(source)
+                st.subheader("Answer")
+                st.success(data.get("answer", "No answer found"))
+
+                st.subheader("Sources")
+
+                for source in data.get("sources", []):
+                    st.info(source)
+
+            else:
+                st.error(
+                    f"API Error: {response.text}"
+                )
+
+        except Exception as e:
+            st.error(f"Connection error: {e}")
+
 
 st.divider()
 
@@ -51,10 +50,16 @@ st.header("Analytics")
 
 if st.button("Load Analytics"):
 
-    response = requests.get(
-        f"{API}/analytics"
-    )
+    try:
+        response = requests.get(
+            f"{API}/analytics",
+            timeout=60
+        )
 
-    st.json(
-        response.json()
-    )
+        if response.status_code == 200:
+            st.json(response.json())
+        else:
+            st.error(response.text)
+
+    except Exception as e:
+        st.error(f"Analytics error: {e}")
