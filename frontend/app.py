@@ -1,7 +1,7 @@
 import streamlit as st
 import requests
 
-API = "https://your-render-app.onrender.com"
+API = "https://aws-agreement-rag-chatbot.streamlit.app/"
 
 
 # st.set_page_config(
